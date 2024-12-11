@@ -1,7 +1,7 @@
 # College-OLX
 
 Everyone 
-#Step1: Firstly Clone this Repositry to your using Git Clone command on your VS CODE
+#Step1: Firstly Clone this Repositry to your VS CODE  using Git Clone command
 
 
 #Step2: Create your own seperate branch write and your code on that branch
