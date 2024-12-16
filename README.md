@@ -12,6 +12,7 @@ Everyone
  
 
 #Step4 : Inform me
+#step6 : Create your new branch
 
 <<<<<<< HEAD
 =======
