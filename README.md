@@ -12,7 +12,7 @@ Everyone
  
 
 #Step4 : Inform me
-#step6 : Create your new branch
+#step6 : Create your new branch and write your code on that branch
 
 <<<<<<< HEAD
 =======
