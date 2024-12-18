@@ -13,6 +13,7 @@ import{
 import Homee from './components/Homee';
 import Loginn from './components/Loginn';
 import Signup from './components/Signup';
+import AddProduct from './components/AddProduct';
 const router=createBrowserRouter([
 {
   path: "/",
@@ -29,6 +30,10 @@ const router=createBrowserRouter([
 {
   path: "/signup",
   element: (<Signup/>),
+},
+{
+  path: "/add-product",
+  element: (<AddProduct/>),
 },
 ]);
 
