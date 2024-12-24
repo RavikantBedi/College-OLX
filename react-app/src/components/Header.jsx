@@ -1,8 +1,9 @@
 import React from 'react'
 import './Header.css'
+import './Home.css';
 import {Link, useNavigate} from 'react-router-dom';
 
-function Header() {
+function Header(props) {
   const navigate=useNavigate();
 
   const handleLogout=()=>{
@@ -11,19 +12,23 @@ function Header() {
   }
 
   return (
-    <div>
+    <div className=" header-container d-flex justify-content-between">
         <div className='header'>
           
-        <Link to="/" >HOME</Link>
-          <span className='mt-3'>SELL & PURCHASE ONLINE...... in your city.</span>
-
-        { !localStorage.getItem('token')?
-           <Link to="/Loginn" >LOGIN</Link>:
-           <button onClick={handleLogout}>LogOut</button>
-        }
-         
+        <Link className="links" to="/" >HOME</Link>
+        <input className="search" type="text" value={props && props.search} 
+        onChange={(e)=>props.handlesearch && props.handlesearch(e.target.value)}
+        />
+        <button className="search-btn" onClick={()=>props.handleClick && props.handleClick()}> SEARCH</button>
+        
         </div>
+      <div>
 
+      {!!localStorage.getItem('token') && <Link to="/add-product"><button className="logout-btn" >ADD PRODUCTS</button></Link>}
+      {!localStorage.getItem('token')?
+           <Link to="/Loginn" >LOGIN</Link>:
+           <button className="logout-btn" onClick={handleLogout}>LogOut</button>}
+      </div>
     </div>
   )
 }
