@@ -1,81 +1,8 @@
-// import React, { useEffect,useState } from 'react'
-// import Header from './Header'
-// import { useNavigate,Link } from 'react-router-dom';
-// import axios from 'axios';
-// function AddProduct() {
-//   const navigate=useNavigate();
-//      const[PNAME,setPNAME]=useState('');
-//      const[PDESC,setPDESC]=useState('');
-//      const[PPRICE,setPPRICE]=useState('');
-//      const[CATOGORY,setCATOGORY]=useState('');
-//      const[PIMAGE,setPIMAGE]=useState('');
-  
-//   useEffect(()=>{
-//     if(!localStorage.getItem('token')){
-//       navigate('/Loginn')
-//     }
-//   },[])
-
-//   const  handleApi=()=>{
-//         const formData=new FormData();
-//         formData.append('PNAME',PNAME)
-//         formData.append('PDESC',PDESC)
-//         formData.append('CATOGORY',CATOGORY)
-//         formData.append('PIMAGE',PIMAGE)
-//         const url='http://localhost:3001/add-products';
-//         axios.post(URL,formData)
-//         .then((res)=>{
-//             console.log(res)
-//         })
-//         .catch((err)=>{
-//             console.log(err)
-//         })
-//   }
-//   return (
-//     <div>
-//       <Header/>
-//       <div className="p-3">
-//       <h2>ADD PRODUCT HERE:</h2>
-//     <label>Product Name </label>
-//     <input className="form-control"type="text"  value={PNAME} onChange={(e)=>{
-//         setPNAME(e.target.value)
-//       }}/>
-//     <label>Product Desciption</label>
-//     <input className="form-control"type="text"  value={PDESC} onChange={(e)=>{
-//         setPDESC(e.target.value)
-//       }}/>
-//     <label>Product Price </label>
-//     <input className="form-control"type="text"  value={PPRICE} onChange={(e)=>{
-//         setPPRICE(e.target.value)
-//       }}/>
-//     <label>Product Category </label>
-//     <input className="form-control"type="text"  value={CATOGORY} onChange={(e)=>{
-//         setCATOGORY(e.target.value)
-//       }}/>
-//     <select className="form-control">
-//         <option>Bikes</option>
-//         <option>Mobiles</option>
-//         <option>Cloth</option>
-//     </select>
-//     <label>Product Image </label>
-//     <input className="form-control"type="file" onChange={(e)=>{
-//         setPIMAGE(e.target.files[0])
-//       }}/>
-//     <button onClick={handleApi} className="btn btn-primary mt-3">SUBMIT</button>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default AddProduct
-
-
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-// import categories from "./CategoriesList";
-// import API_URL from "../constants";
+
 
 function AddProduct() {
 
@@ -85,7 +12,6 @@ function AddProduct() {
     const [price, setprice] = useState('');
     const [category, setcategory] = useState('');
     const [pimage, setpimage] = useState('');
-    // const [pimage2, setpimage2] = useState('');
 
 
     useEffect(() => {
@@ -93,10 +19,7 @@ function AddProduct() {
             navigate('/Loginn')
         }
     }, [])
-
     const handleApi = () => {
-
- 
             const formData = new FormData();
             formData.append('pname', pname)
             formData.append('pdesc', pdesc)
@@ -108,7 +31,6 @@ function AddProduct() {
             axios.post(url, formData)
                 .then((res) => {
                     if (res.data.message) {
-                        console.log(res)
                         alert(res.data.message); 
                         navigate('/')
                     }
@@ -142,7 +64,11 @@ function AddProduct() {
                     onChange={(e) => { setcategory(e.target.value) }}>
                     <option> Bikes </option>
                     <option> Mobiles </option>
-                    <option> Cloth </option>
+                    <option> Watch </option>
+                    {/* <option> Electronic</option>
+                    <option> Furniture</option>
+                    <option> Jwellary </option>
+                    <option> House </option> */}
                 
                 </select>
                 <label> Product Image </label>
