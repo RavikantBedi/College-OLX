@@ -2,6 +2,7 @@ import Header from './Header';
 import {Link ,useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 import axios from "axios";
+import './../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 function Loginn() {
   const navigate=useNavigate()
 
@@ -30,21 +31,33 @@ function Loginn() {
   return (
     <div>
       <Header/>
-      welcome to login page
-      <br></br>
-      USERNAME:
-      <input type="text" value={username} onChange={(e)=>{
+      <div class="d-flex align-items-center justify-content-center vh-100 bg-primary">
+    <div class="card p-4 shadow" >
+      <form>
+        <h2 class="text-center mb-4 text-primary">Welcome to Login Page</h2>
+       
+        <div class="form-outline mb-4">
+          <label class="form-label" for="form2Example1">User Name</label>
+          <input type="text" class="form-control"  placeholder="Enter your User Name"  value={username} onChange={(e)=>{
         setusername(e.target.value)
       }}/>
-      <br></br>
-      PASSWORD:
-      <input type="text" value={password} onChange={(e)=>{
-        setpassword(e.target.value)
-      }}/>
-      <br></br>
-      <button onClick={handleApi}>LOGIN</button>
-      <Link to="/signup">SIGNUP</Link>
-      
+        </div>
+       
+        <div class="form-outline mb-4">
+          <label class="form-label" for="form2Example2">Password</label>
+          <input type="password"  class="form-control" placeholder="Enter your password" value={password} onChange={(e)=>{
+            setpassword(e.target.value)
+          }} />
+        </div>
+       
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-success w-45" onClick={handleApi}>Login</button>
+         
+          <Link class="btn btn-primary w-45  "  to="/signup">SIGNUP</Link>
+        </div>
+      </form>
+    </div>
+  </div>
     </div>
   )
 }
