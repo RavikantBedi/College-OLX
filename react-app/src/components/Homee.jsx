@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import axios from 'axios';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate,Link, data } from 'react-router-dom';
 import Categoriess from './Categoriess';
 import { FaHeart } from "react-icons/fa";
 import './Home.css';
@@ -55,6 +55,23 @@ const handleCategory=(value)=>{
   })
   setcproducts(filteredProduct)
 }
+const handleLike=(productId)=>{
+  let userId=localStorage.getItem('userId');
+  console.log('userId ','productid',productId,userId);
+  const url='http://localhost:3000/like-product';
+  const data = { userId, productId }
+  axios.post(url, data)
+      .then((res) => {
+          if (res.data.message) {
+              alert('Liked.')
+          }
+      })
+      .catch((err) => {
+          alert('Server Err.12')
+      })
+
+}
+
 
 
   return (
@@ -67,7 +84,7 @@ const handleCategory=(value)=>{
         cproducts.map((item,index)=>{
           return (
             <div key={item._id} className="card m-3">
-              <div className="icon-con">
+              <div onClick={()=> handleLike(item._id)} className="icon-con">
               <FaHeart className="icons"/>
               </div>
               <img width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
@@ -89,7 +106,7 @@ const handleCategory=(value)=>{
         products.map((item,index)=>{
           return (
             <div key={item._id} className="card m-3">
-                   <div className="icon-con">
+                   <div onClick={()=> handleLike(item._id)} className="icon-con">
               <FaHeart className="icons"/>
               </div>
               <img width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
