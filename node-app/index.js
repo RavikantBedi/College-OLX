@@ -1,8 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const path=require('path')
+
 const jwt = require('jsonwebtoken');
-const multer  = require('multer')
+const multer  = require('multer');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads')
@@ -22,18 +23,34 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
- 
+
 const port = 3000
 const mongoose = require('mongoose');
- 
 mongoose.connect('mongodb://localhost:27017/');
-const Users = mongoose.model('Users', { username: String, password:String });
+const Users=mongoose.model('Users',{
+  username:String,
+  password:String,
+  likedProducts:[{type:mongoose.Schema.Types.ObjectId,ref:'Products'}]
+});
 const Products = mongoose.model('Products', { pname: String, pdesc:String,price: String,category: String,pimage: String });
 
 
 app.get('/', (req, res) => {
   res.send('Hi  OLX  Developer!')
-})
+}) 
+
+app.post('/like-product', (req, res) => {
+  let productId=req.body.productId;
+  let userId=req.body.userId;
+  console.log(req.body);
+  Users.updateOne({_id:userId},{$addToSet:{likedProducts:productId}})
+  .then(() =>{
+    res.send({message:'Liked Success.'})
+  })
+  .catch(()=>{
+    res.send({message:'server err123'})
+  })
+}) 
 
 app.post('/add-product',upload.single('pimage'), (req, res) => {
   console.log(req.body);
@@ -43,9 +60,10 @@ app.post('/add-product',upload.single('pimage'), (req, res) => {
   const price = req.body.price;
   const category = req.body.category;
   const pimage = req.file.path;
+
   const products=new Products({pname,pdesc,price,category,pimage})
-  products.save().
-  then(() =>{
+  products.save()
+  .then(() =>{
     res.send({message:'saved success'})
   })
   .catch(()=>{
@@ -94,7 +112,7 @@ app.post('/Loginn',(req,res)=>{
       const token=jwt.sign({
         data: result
       }, 'MYKEY', { expiresIn: '1h'});
-      res.send({message:'Find Success.',token:token})
+      res.send({message:'Find Success.',token:token,userId:result._id})
     }
     if(result.password!=password){
       res.send({message:'password Incorrect'})
