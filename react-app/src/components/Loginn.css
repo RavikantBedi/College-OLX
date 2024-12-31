@@ -1,0 +1,144 @@
+/* General Reset */
+
+  
+  /* Container */
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #1e1e2f;
+  }
+  
+  .login-box {
+    width:100%;
+    max-width:400px;
+    margin: 20px auto;
+    background-color: #1e1e2f;
+    color: #fff;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  /* Heading */
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  /* Input Group */
+  .input-group {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 12px 35px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  
+  .input-field:focus {
+    border-color: #00aaff;
+  }
+  
+  .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1rem;
+  }
+  
+  /* Options */
+  .options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .remember-me {
+    display: flex;
+    align-items: center;
+  }
+  
+  .remember-me input {
+    margin-right: 5px;
+  }
+  
+  .forgot-password {
+    color: #00aaff;
+    text-decoration: none;
+  }
+  
+  .forgot-password:hover {
+    text-decoration: underline;
+  }
+  
+  /* Login Button */
+  .login-button {
+    background-color: #000e40;
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #001a66;
+  }
+  
+  /* Sign-up Link */
+  .Signup-link {
+    margin: 15px 0;
+    font-size: 0.9rem;
+  }
+  
+  .Signup-link a {
+    color: #00aaff;
+    text-decoration: none;
+  }
+  
+  .Signup-link a:hover {
+    text-decoration: underline;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 500px) {
+    .login-box {
+      padding: 20px 10px;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    .input-field {
+      padding: 10px 35px;
+    }
+  
+    .login-button {
+      padding: 10px 0;
+    }
+  
+    .social-button {
+      width: 45px;
+      height: 45px;
+      font-size: 1rem;
+    }
+  }
+  

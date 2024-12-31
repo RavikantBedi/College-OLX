@@ -1,8 +1,10 @@
+
+import './../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import Header from './Header';
 import {Link ,useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 import axios from "axios";
-import './../../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import './Loginn.css';
 function Loginn() {
   const navigate=useNavigate()
 
@@ -14,53 +16,60 @@ function Loginn() {
     const data={username,password}
     axios.post(url,data)
     .then((res)=>{
+      console.log(res.data)
       if(res.data.message){
         alert(res.data.message);
         if(res.data.token){
           localStorage.setItem('token',res.data.token)
-          localStorage.setItem('userId',res.data.userId)
           navigate('/');
         }
        
       }
     })
     .catch((err)=>{
-      alert('SERVER ERR')
+      console.log(err)
+      alert('SERVER ERROR')
     })
   }
-  
   return (
     <div>
       <Header/>
-      <div class="d-flex align-items-center justify-content-center vh-100 bg-primary">
-    <div class="card p-4 shadow" >
-      <form>
-        <h2 class="text-center mb-4 text-primary">Welcome to Login Page</h2>
-       
-        <div class="form-outline mb-4">
-          <label class="form-label" for="form2Example1">User Name</label>
-          <input type="text" class="form-control"  placeholder="Enter your User Name"  value={username} onChange={(e)=>{
-        setusername(e.target.value)
-      }}/>
-        </div>
-       
-        <div class="form-outline mb-4">
-          <label class="form-label" for="form2Example2">Password</label>
-          <input type="password"  class="form-control" placeholder="Enter your password" value={password} onChange={(e)=>{
-            setpassword(e.target.value)
-          }} />
-        </div>
-       
-        <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-success w-45" onClick={handleApi}>Login</button>
-         
-          <Link class="btn btn-primary w-45  "  to="/signup">SIGNUP</Link>
-        </div>
-      </form>
+    <div className="login-container">
+      <div className="login-box">
+        <h2>Login</h2>
+        <form>
+          {/* Email Input */}
+          <div className="input-group">
+            <i className="icon fas fa-user"></i>
+            <input type="text" value={username} onChange={(e)=>{ setusername(e.target.value)}} placeholder="Enter your Username" className="input-field" />
+          </div>
+
+          {/* Password Input */}
+          <div className="input-group">
+            <i className="icon fas fa-lock"></i>
+            <input type="password" value={password} onChange={(e)=>{setpassword(e.target.value)}} placeholder="Enter your Password" className="input-field" />
+          </div>
+
+          {/* Remember Me & Forgot Password */}
+          <div className="options">
+            <label className="remember-me">
+              <input type="checkbox" /> Remember Password
+            </label>
+            <Link to="/ForgotPassword">Forgot password</Link>
+          </div>
+
+          {/* Submit Button */}
+          <button type="button" className="login-button" onClick={handleApi}>Login</button>
+
+          {/* Sign-up Link */}
+          <p className="Signup-link">
+            No account yet? <Link to="/Signup">Sign-up</Link>
+          </p>
+        </form>
+      </div>
     </div>
-  </div>
     </div>
-  )
-}
+  );
+};
 
 export default Loginn;
