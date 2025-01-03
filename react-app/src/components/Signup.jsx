@@ -1,14 +1,17 @@
 import Header from './Header';
 import {Link} from 'react-router-dom';
+import './Signup.css';
+import axios from 'axios';
 import { useState } from 'react';
-import axios from "axios";
 
 function Signup() {
+
   const[username,setusername]=useState('');
   const[password,setpassword]=useState('');
 
   const handleApi=()=>{
-    const url='http://localhost:3000/signup';
+    console.log({username,password})
+    const url='http://localhost:3000/Signup';
     const data={username,password}
     axios.post(url,data)
     .then((res)=>{
@@ -18,43 +21,41 @@ function Signup() {
       }
     })
     .catch((err)=>{
-      alert('SERVER ERR')
+      console.log(err)
+      alert('SERVER ERROR')
     })
   }
-
   return (
     <div>
       <Header/>
-      <div class="d-flex align-items-center justify-content-center vh-100 bg-primary">
-    <div class="card p-4 shadow" >
+      <div className="Signup-container">
+    <div className="form-container">
+      <h1>Create an account</h1>
+      <p>
+        Already have an account? <Link to="/Loginn">Log-in</Link>
+      </p>
       <form>
-        <h2 class="text-center mb-4 text-primary">Welcome to SignUp Page</h2>
-       
-        <div class="form-outline mb-4">
-          <label class="form-label" for="form2Example1">User Name</label>
-          <input type="text" class="form-control"  placeholder="Enter your User Name"  value={username} onChange={(e)=>{
-        setusername(e.target.value)
-      }}/>
+        
+        <input type="text" value={username} onChange={(e) =>{ setusername(e.target.value)}} placeholder="Enter your Username" className="input-field full-width" />
+        <input type="password" value={password} onChange={(e) =>{ setpassword(e.target.value)}} placeholder="Enter your password" className="input-field full-width" />
+        <div className="checkbox-group">
+          <input type="checkbox" id="terms" />
+          <label htmlFor="terms">
+            I agree to the <Link to="/t&c">Terms & Conditions</Link>
+          </label>
         </div>
-       
-        <div class="form-outline mb-4">
-          <label class="form-label" for="form2Example2">Password</label>
-          <input type="password"  class="form-control" placeholder="Enter your password" value={password} onChange={(e)=>{
-            setpassword(e.target.value)
-          }} />
-        </div>
-       
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-primary w-45  " onClick={handleApi}>SIGNUP</button>
-          <Link type="button" class="btn btn-success w-45" to="/Loginn" >Login</Link>
-         
-        </div>
+        <button type="submit" className="create-button" onClick={handleApi}>Create account</button>
       </form>
+      <div className="divider">Or register with</div>
+      <div className="social-buttons">
+        <button className="google-button">Google</button>
+        <button className="apple-button">Apple</button>
+      </div>
     </div>
-  </div>
-      
     </div>
-  )
-}
+    </div>
+    
+  );
+};
 
 export default Signup;
