@@ -82,6 +82,18 @@ app.get('/get-products',(req,res)=>{
   })
 })
 
+app.post('/liked-products',(req,res)=>{
+  Users.findOne({_id:req.body.userId}).populate('likedProducts')
+  .then((result)=>{
+    console.log(result,"user data")
+    res.send({message:' success',products:result.likedProducts})
+  })
+  .catch((err)=>{
+    res.send({message:'server err.....'})
+  })
+})
+
+
 app.post('/signup',(req,res)=>{
   console.log(req.body);
   const username = req.body.username;
@@ -100,9 +112,9 @@ app.post('/Loginn',(req,res)=>{
   console.log(req.body);
   const username = req.body.username;
   const password = req.body.password;
+  // Check if user exists and password matches
   Users.findOne({username:username})
-
-.then((result) =>{
+ .then((result) =>{
   console.log(result,"user data")
   if(!result){
     res.send({message:'user not found. '})

@@ -5,7 +5,7 @@ import { useNavigate,Link, data } from 'react-router-dom';
 import Categoriess from './Categoriess';
 import { FaHeart } from "react-icons/fa";
 import './Home.css';
-function Homee() {
+function LikedProducts() {
   const navigate=useNavigate();
   const [products,setproducts]=useState([]);
   const [cproducts,setcproducts]=useState([]);
@@ -18,8 +18,9 @@ function Homee() {
   // },[])
 
   useEffect(()=>{
-    const url='http://localhost:3000/get-products';
-    axios.get(url)
+    const url='http://localhost:3000/liked-products';
+    let data = { userId: localStorage.getItem('userId') }
+    axios.post(url,data)
     .then((res) => {
         console.log(res) 
         if(res.data.products){
@@ -72,9 +73,6 @@ const handleLike=(productId)=>{
 
 }
 
-const handleProduct=(productId)=>{
-  navigate('/product/'+productId)
-}
 
 
   return (
@@ -108,13 +106,13 @@ const handleProduct=(productId)=>{
         products && products.length>0 && 
         products.map((item,index)=>{
           return (
-            <div onClick={()=>handleProduct(item._id)} key={item._id} className="card m-3">
+            <div key={item._id} className="card m-3">
                    <div onClick={()=> handleLike(item._id)} className="icon-con">
               <FaHeart className="icons"/>
               </div>
-              <img width="300px" height="150px"src={'http://localhost:3000/'+item.pimage}/>
-              <h3 className="m-2 price-text">Rs.{item.price} /-</h3>
+              <img width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
               <p className="m-2"> {item.pname} | {item.category}</p>
+              <h3 className="m-2 text-danger"> {item.price}</h3>
               <p className="m-2 text-success"> {item.pdesc}</p>
             
               </div>
@@ -126,7 +124,7 @@ const handleProduct=(productId)=>{
 }
 
 
-export default Homee
+export default LikedProducts
 
 
 
