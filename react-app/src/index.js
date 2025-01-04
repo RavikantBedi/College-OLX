@@ -42,7 +42,7 @@ const router=createBrowserRouter([
   element: (<LikedProducts/>),
 },
 {
-  path: "/product/:id",
+  path: "/product/:productId",
   element: (<ProductDetail/>),
 },
 ]);

@@ -81,6 +81,18 @@ app.get('/get-products',(req,res)=>{
     res.send({message:'server err.....'})
   })
 })
+app.get('/get-product/:pId',(req,res)=>{
+  console.log(req.params);
+  
+  Products.findOne({_id:req.params.pId})
+  .then((result)=>{  
+    //console.log(result,"user data")
+    res.send({message:' success',product:result})
+  })
+  .catch((err)=>{ 
+    res.send({message:'server err.....'})
+  })
+})
 
 app.post('/liked-products',(req,res)=>{
   Users.findOne({_id:req.body.userId}).populate('likedProducts')
