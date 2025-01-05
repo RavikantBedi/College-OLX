@@ -108,16 +108,15 @@ const handleProduct=(productId)=>{
         products && products.length>0 && 
         products.map((item,index)=>{
           return (
-            <div onClick={()=>handleProduct(item._id)} key={item._id} className="card m-3">
+            <div  key={item._id} className="card m-3">
                    <div onClick={()=> handleLike(item._id)} className="icon-con">
               <FaHeart className="icons"/>
               </div>
-              <img width="300px" height="150px"src={'http://localhost:3000/'+item.pimage}/>
+              <img onClick={()=>handleProduct(item._id)} width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
               <h3 className="m-2 price-text">Rs.{item.price} /-</h3>
               <p className="m-2"> {item.pname} | {item.category}</p>
               <p className="m-2 text-success"> {item.pdesc}</p>
-            
-              </div>
+            </div>
           )
         })}
       </div>
