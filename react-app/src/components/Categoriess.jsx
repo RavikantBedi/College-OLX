@@ -1,10 +1,10 @@
 import React from 'react'
 import './Header.css'
 import {Link, useNavigate} from 'react-router-dom';
-import Categories    from './CategoriesL';
+import Categories from './CategoriesL';
 
 function Categoriess(props) {
-
+       const navigate=useNavigate();
 
   return (
     <div className="cat-container">
@@ -13,7 +13,7 @@ function Categoriess(props) {
             Categories && Categories.length>0 && 
             Categories.map((item,index)=>{
               return(
-                <span onClick={()=>props.handleCategory && props.handleCategory(item) } key={index}className="category">{item}</span>
+                <span onClick={()=>navigate('/category/' + item)} key={index}className="category">{item}</span>
               )
             })}
     </div>

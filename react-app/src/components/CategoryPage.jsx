@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import axios from 'axios';
 import { useNavigate,Link, data } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import Categoriess from './Categoriess';
 import { FaHeart } from "react-icons/fa";
 import './Home.css';
-function Homee() {
+function CategoryPage() {
   const navigate=useNavigate();
+  const param=useParams()
+  console.log(param);
   const [products,setproducts]=useState([]);
   const [cproducts,setcproducts]=useState([]);
   const [search,setsearch]=useState('');
@@ -19,7 +22,7 @@ function Homee() {
   // },[])
 
   useEffect(()=>{
-    const url='http://localhost:3000/get-products';
+    const url='http://localhost:3000/get-products?catName=' + param.catName;
     axios.get(url)
     .then((res) => {
         console.log(res) 
@@ -31,7 +34,7 @@ function Homee() {
         alert('Server Err.')
         // console.error("Error Details: ", err);
     })
-  },[])
+  },[param])
 
   const handlesearch=(value)=>{
         setsearch(value);
@@ -141,7 +144,7 @@ const handleProduct=(productId)=>{
 }
 
 
-export default Homee
+export default CategoryPage;
 
 
 

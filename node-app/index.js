@@ -27,17 +27,43 @@ app.use(bodyParser.urlencoded({ extended: false }))
 const port = 3000
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/');
+// User schema......
 const Users=mongoose.model('Users',{
   username:String,
   password:String,
   likedProducts:[{type:mongoose.Schema.Types.ObjectId,ref:'Products'}]
 });
-const Products = mongoose.model('Products', { pname: String, pdesc:String,price: String,category: String,pimage: String });
+//Product schema.......where 'Products' is our collection name
+const Products = mongoose.model('Products', { 
+  pname: String,
+  pdesc:String,
+  price: String,
+  category: String,
+  pimage: String
+  });
 
 
 app.get('/', (req, res) => {
   res.send('Hi  OLX  Developer!')
 }) 
+
+app.get('/search',(req,res)=>{
+  let search=req.query.search;
+  Products.find({
+    $or:[
+      {pname:{$regex:search}},
+      {pdesc:{$regex:search}},
+      {price:{$regex:search}},
+    ]
+  })
+  .then((results)=>{
+    console.log(results,"user data")
+    res.send({message:' success',products:results})
+  })
+  .catch((err)=>{
+    res.send({message:'server err.....'})
+  })
+})
 
 app.post('/like-product', (req, res) => {
   let productId=req.body.productId;
@@ -72,7 +98,14 @@ app.post('/add-product',upload.single('pimage'), (req, res) => {
 })
 
 app.get('/get-products',(req,res)=>{
-  Products.find()
+
+  const catName=req.query.catName;
+  let _f={}
+  if(catName){
+    _f={category:catName}
+  }
+
+  Products.find(_f)
   .then((result)=>{
     console.log(result,"user data")
     res.send({message:' success',products:result})
@@ -81,6 +114,7 @@ app.get('/get-products',(req,res)=>{
     res.send({message:'server err.....'})
   })
 })
+
 app.get('/get-product/:pId',(req,res)=>{
   console.log(req.params);
   
