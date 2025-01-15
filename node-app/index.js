@@ -29,15 +29,45 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/');
 const Users=mongoose.model('Users',{
   username:String,
+  mobile:String,
+  email:String,
   password:String,
   likedProducts:[{type:mongoose.Schema.Types.ObjectId,ref:'Products'}]
 });
-const Products = mongoose.model('Products', { pname: String, pdesc:String,price: String,category: String,pimage: String });
+const Products = mongoose.model('Products', { 
+  pname: String,
+   pdesc:String,
+   price: String,
+   category: String,
+   pimage: String,
+   pimage2: String,
+   addedBy:mongoose.Schema.Types.ObjectId
+  });
 
 
 app.get('/', (req, res) => {
   res.send('Hi  OLX  Developer!')
 }) 
+
+app.get('/search',(req,res)=>{
+let search=req.query.search;
+ console.log(res.data);
+  Products.find({
+    $or:[
+      {pname:{$regex:search}},
+      {pdesc:{$regex:search}},
+      {price:{$regex:search}},
+    ]
+  })
+  .then((results)=>{
+    res.send({message:'success',products:results})
+  })
+  .catch((err)=>{
+    res.send({message:'server err.'})
+  })
+})
+
+
 
 app.post('/like-product', (req, res) => {
   let productId=req.body.productId;
@@ -52,16 +82,18 @@ app.post('/like-product', (req, res) => {
   })
 }) 
 
-app.post('/add-product',upload.single('pimage'), (req, res) => {
+app.post('/add-product',upload.fields([{name:'pimage'},{name:'pimage2'}]), (req, res) => {
+  console.log(req.files);
   console.log(req.body);
-  console.log(req.file.path);
   const pname = req.body.pname;
   const pdesc = req.body.pdesc;
   const price = req.body.price;
   const category = req.body.category;
-  const pimage = req.file.path;
+  const pimage = req.files.pimage[0].path;
+  const pimage2 = req.files.pimage2[0].path;
+  const addedBy=req.body.userId;
 
-  const products=new Products({pname,pdesc,price,category,pimage})
+  const products=new Products({pname,pdesc,price,category,pimage,pimage2,addedBy})
   products.save()
   .then(() =>{
     res.send({message:'saved success'})
@@ -72,15 +104,24 @@ app.post('/add-product',upload.single('pimage'), (req, res) => {
 })
 
 app.get('/get-products',(req,res)=>{
-  Products.find()
+
+  const catName=req.query.catName;
+  let _f={}
+  if(catName){
+    _f={category:catName}
+  }
+
+  Products.find(_f)
   .then((result)=>{
     console.log(result,"user data")
     res.send({message:' success',products:result})
   })
   .catch((err)=>{
     res.send({message:'server err.....'})
-  })
+  })
 })
+
+
 app.get('/get-product/:pId',(req,res)=>{
   console.log(req.params);
   
@@ -110,7 +151,9 @@ app.post('/signup',(req,res)=>{
   console.log(req.body);
   const username = req.body.username;
   const password = req.body.password;
-  const user = new Users({ username:username,password:password });
+  const mobile = req.body.mobile;
+  const email = req.body.email;
+  const user = new Users({ username:username,password:password,email,mobile});
   user.save().then(() =>{
     res.send({message:'saved success.'})
   })
@@ -119,6 +162,18 @@ app.post('/signup',(req,res)=>{
     console.error("Error Details: ", err);
   })
 })
+
+app.get('/get-user/:uId',(req,res)=>{
+  const _userId=req.params.uId;
+  Users.findOne({_id: _userId})
+  .then((result) =>{
+    res.send({message:'success.',user:{email:result.email,mobile:result.mobile,username:result.username}})
+  })
+  .catch(()=>{
+    res.send({message:'server err122'})
+  })
+})
+
 
 app.post('/Loginn',(req,res)=>{
   console.log(req.body);
