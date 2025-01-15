@@ -4,15 +4,18 @@ import './Signup.css';
 import axios from 'axios';
 import { useState } from 'react';
 
+
 function Signup() {
 
   const[username,setusername]=useState('');
   const[password,setpassword]=useState('');
+  const[email,setemail]=useState('');
+  const[mobile,setmobile]=useState('');
 
   const handleApi=()=>{
     console.log({username,password})
     const url='http://localhost:3000/Signup';
-    const data={username,password}
+    const data={username,password,mobile,email};
     axios.post(url,data)
     .then((res)=>{
       console.log(res.data)
@@ -37,7 +40,9 @@ function Signup() {
       <form>
         
         <input type="text" value={username} onChange={(e) =>{ setusername(e.target.value)}} placeholder="Enter your Username" className="input-field full-width" />
-        <input type="password" value={password} onChange={(e) =>{ setpassword(e.target.value)}} placeholder="Enter your password" className="input-field full-width" />
+        <input type="text" value={mobile} onChange={(e) =>{ setmobile(e.target.value)}} placeholder="Enter your mobile Number" className="input-field full-width" />
+        <input type="text" value={email} onChange={(e) =>{ setemail(e.target.value)}} placeholder="Enter your Email" className="input-field full-width" />
+        <input type="text" value={password} onChange={(e) =>{ setpassword(e.target.value)}} placeholder="Enter your password" className="input-field full-width" />
         <div className="checkbox-group">
           <input type="checkbox" id="terms" />
           <label htmlFor="terms">
@@ -59,3 +64,9 @@ function Signup() {
 };
 
 export default Signup;
+
+
+
+
+
+

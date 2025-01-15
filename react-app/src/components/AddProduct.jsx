@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import Categories from "./CategoriesL";
 
 
 function AddProduct() {
@@ -12,6 +13,7 @@ function AddProduct() {
     const [price, setprice] = useState('');
     const [category, setcategory] = useState('');
     const [pimage, setpimage] = useState('');
+    const [pimage2, setpimage2] = useState('');
 
 
     useEffect(() => {
@@ -26,6 +28,8 @@ function AddProduct() {
             formData.append('price', price)
             formData.append('category', category)
             formData.append('pimage', pimage)
+            formData.append('pimage2', pimage2)
+            formData.append('userId', localStorage.getItem('userId'))
 
             const url = 'http://localhost:3000/add-product';
             axios.post(url, formData)
@@ -38,10 +42,6 @@ function AddProduct() {
                 .catch((err) => {
                     alert('server err')
                 })
-        
-
-
-
     }
 
     return (
@@ -65,10 +65,12 @@ function AddProduct() {
                     <option> Bikes </option>
                     <option> Mobiles </option>
                     <option> Watch </option>
-                    {/* <option> Electronic</option>
-                    <option> Furniture</option>
-                    <option> Jwellary </option>
-                    <option> House </option> */}
+                    {Categories && Categories.length>0 &&
+                    Categories.map((item,index)=>{
+                        return(
+                            <option key={'option'+index}>{item}</option>
+                        )
+                    })}
                 
                 </select>
                 <label> Product Image </label>
@@ -76,6 +78,12 @@ function AddProduct() {
                     onChange={(e) => {
                         // console.log(e.target.files[0])
                         setpimage(e.target.files[0])
+                    }} />
+                    <label> Product Second Image</label>
+                     <input className="form-control" type="file"
+                    onChange={(e) => {
+                        // console.log(e.target.files[0])
+                        setpimage2(e.target.files[0])
                     }} />
                 <button onClick={handleApi} className="btn btn-primary mt-3"> SUBMIT </button>
             </div>

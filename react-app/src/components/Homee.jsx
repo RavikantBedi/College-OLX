@@ -4,12 +4,14 @@ import axios from 'axios';
 import { useNavigate,Link, data } from 'react-router-dom';
 import Categoriess from './Categoriess';
 import { FaHeart } from "react-icons/fa";
+
 import './Home.css';
 function Homee() {
   const navigate=useNavigate();
   const [products,setproducts]=useState([]);
   const [cproducts,setcproducts]=useState([]);
   const [search,setsearch]=useState('');
+  const [issearch, setissearch] = useState(false);
 
   // useEffect(()=>{
   //   if(!localStorage.getItem('token')){
@@ -37,14 +39,27 @@ function Homee() {
   }
 
   const handleClick=()=>{
-    let filteredProduct=products.filter((item)=>{
-      if(item.pname.toLowerCase().includes(search.toLowerCase()) || 
-      item.pdesc.toLowerCase().includes(search.toLowerCase()) ||
-      item.category.toLowerCase().includes(search.toLowerCase())){
-        return item;
-      }
-    })
-    setcproducts(filteredProduct)
+
+    const url='http://localhost:3000/search?search='+search;
+    axios.get(url)
+        .then((res) => {
+          console.log(res.data.products);
+          setcproducts(res.data.products);
+          setissearch(true);
+        })
+        .catch((err) => {
+            alert('Server Err.12')
+        })
+  
+
+    // let filteredProduct=products.filter((item)=>{
+    //   if(item.pname.toLowerCase().includes(search.toLowerCase()) || 
+    //   item.pdesc.toLowerCase().includes(search.toLowerCase()) ||
+    //   item.category.toLowerCase().includes(search.toLowerCase())){
+    //     return item;
+    //   }
+    // })
+    // setcproducts(filteredProduct)
 }
 
 const handleCategory=(value)=>{
@@ -77,55 +92,57 @@ const handleProduct=(productId)=>{
 }
 
 
-  return (
-    <div>
-      <Header search={search} handlesearch={handlesearch} handleClick={handleClick}/>
-      <Categoriess handleCategory={handleCategory}/>
-      <h5>SEARCH RESULTS </h5>
-      <div className="d-flex justify-content-center flex-wrap">
-      {cproducts && products.length>0 && 
-        cproducts.map((item,index)=>{
-          return (
-            <div key={item._id} className="card m-3">
-              <div onClick={()=> handleLike(item._id)} className="icon-con">
-              <FaHeart className="icons"/>
-              </div>
-              <img width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
-              <p className="m-2"> {item.pname} | {item.category}</p>
-              <h3 className="m-2 text-danger"> {item.price}</h3>
-              <p className="m-2 text-success"> {item.pdesc}</p>
-            
-              </div>
-          )
-        })
-      }
-
-<h5>ALL Results</h5>
-
-      </div>
-      <div className="d-flex justify-content-center flex-wrap">
-      {
-        products && products.length>0 && 
-        products.map((item,index)=>{
-          return (
-            <div  key={item._id} className="card m-3">
-                   <div onClick={()=> handleLike(item._id)} className="icon-con">
-              <FaHeart className="icons"/>
-              </div>
-              <img onClick={()=>handleProduct(item._id)} width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
-              <h3 className="m-2 price-text">Rs.{item.price} /-</h3>
-              <p className="m-2"> {item.pname} | {item.category}</p>
-              <p className="m-2 text-success"> {item.pdesc}</p>
+return (
+  <div>
+    <Header search={search} handlesearch={handlesearch} handleClick={handleClick}/>
+    <Categoriess handleCategory={handleCategory}/>
+    { issearch && cproducts &&
+     <h5>SEARCH RESULTS 
+      <button className="clear-btn" onClick={()=>setissearch(false)}>CLEAR</button>
+      </h5>}
+    {issearch && cproducts && cproducts.length==0 && <h5>No Results FoundSEARCH RESULTS </h5>}
+    { issearch && <div className="d-flex justify-content-center flex-wrap">
+    {cproducts && products.length>0 && 
+      cproducts.map((item,index)=>{
+        return (
+           <div key={item._id} className="card m-3">
+            <div onClick={()=> handleLike(item._id)} className="icon-con">
+            <FaHeart className="icons"/>
             </div>
-          )
-        })}
-      </div>
-    </div>
-  )
+            <img width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
+            <p className="m-2"> {item.pname} | {item.category}</p>
+            <h3 className="m-2 text-danger"> {item.price}</h3>
+            <p className="m-2 text-success"> {item.pdesc}</p>
+            </div>
+        )
+      })
+    }
+    </div>}
+    {!issearch && <div className="d-flex justify-content-center flex-wrap">
+    {
+      products && products.length>0 && 
+      products.map((item,index)=>{
+        return (
+          <div  key={item._id} className="card m-3">
+                 <div onClick={()=> handleLike(item._id)} className="icon-con">
+            <FaHeart className="icons"/>
+            </div>
+            <img onClick={()=>handleProduct(item._id)} width="300px" height="200px"src={'http://localhost:3000/'+item.pimage}/>
+            <h3 className="m-2 price-text">Rs.{item.price} /-</h3>
+            <p className="m-2"> {item.pname} | {item.category}</p>
+            <p className="m-2 text-success"> {item.pdesc}</p>
+          </div>
+        )
+      })}
+    </div>}
+  </div>
+)
 }
 
 
 export default Homee
+
+
 
 
 
