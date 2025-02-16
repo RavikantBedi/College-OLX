@@ -40,7 +40,7 @@ function Homee() {
 
   const handleClick=()=>{
 
-    const url='http://localhost:3000/search?search='+search;
+    const url='http://localhost:3000/search?search='+search+'&loc='+localStorage.getItem('userLoc');
     axios.get(url)
         .then((res) => {
           console.log(res.data.products);

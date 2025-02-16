@@ -26,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 const port = 3000
 const mongoose = require('mongoose');
+const { type } = require('os');
 mongoose.connect('mongodb://localhost:27017/');
 const Users=mongoose.model('Users',{
   username:String,
@@ -34,15 +35,27 @@ const Users=mongoose.model('Users',{
   password:String,
   likedProducts:[{type:mongoose.Schema.Types.ObjectId,ref:'Products'}]
 });
-const Products = mongoose.model('Products', { 
-  pname: String,
-   pdesc:String,
-   price: String,
-   category: String,
-   pimage: String,
-   pimage2: String,
-   addedBy:mongoose.Schema.Types.ObjectId
-  });
+let schema=new mongoose.Schema({
+    pname: String,
+     pdesc:String,
+     price: String,
+     category: String,
+     pimage: String,
+     pimage2: String,
+     addedBy:mongoose.Schema.Types.ObjectId,
+     pLoc:{
+      type:{
+        type:String,
+        enum:['Point'],
+        default:'Point'
+      },
+      coordinates:{
+        type:[Number]
+      }
+     }
+})
+schema.index({ploc:'2dsphere'});
+const Products = mongoose.model('Products',schema);
 
 
 app.get('/', (req, res) => {
@@ -50,14 +63,28 @@ app.get('/', (req, res) => {
 }) 
 
 app.get('/search',(req,res)=>{
-let search=req.query.search;
- console.log(res.data);
+  console.log(req.query);
+  let latitude=req.query.loc.split(',')[0]
+  let longitude=req.query.loc.split(',')[1]
+  let search=req.query.search;
+ if (!req.query.loc || req.query.loc === 'null') {
+    return res.status(400).send({ message: 'Invalid location' });
+  }
+  console.log(req.query);
   Products.find({
     $or:[
       {pname:{$regex:search}},
       {pdesc:{$regex:search}},
       {price:{$regex:search}},
-    ]
+    ],
+    pLoc:{
+      $near:{
+        $geometry:{
+          type:'Point',
+          coordinates:[parseFloat(latitude),parseFloat(longitude)]
+        },$maxDistance:700*1000,
+      }
+    }
   })
   .then((results)=>{
     res.send({message:'success',products:results})
@@ -85,6 +112,8 @@ app.post('/like-product', (req, res) => {
 app.post('/add-product',upload.fields([{name:'pimage'},{name:'pimage2'}]), (req, res) => {
   console.log(req.files);
   console.log(req.body);
+  const plat = req.body.plat;
+  const plong = req.body.plong;
   const pname = req.body.pname;
   const pdesc = req.body.pdesc;
   const price = req.body.price;
@@ -93,7 +122,10 @@ app.post('/add-product',upload.fields([{name:'pimage'},{name:'pimage2'}]), (req,
   const pimage2 = req.files.pimage2[0].path;
   const addedBy=req.body.userId;
 
-  const products=new Products({pname,pdesc,price,category,pimage,pimage2,addedBy})
+  const products=new Products({pname,pdesc,price,category,pimage,pimage2,addedBy,
+    pLoc:{
+      type:'Point',coordinates:[plat,plong]}
+  })
   products.save()
   .then(() =>{
     res.send({message:'saved success'})
@@ -206,3 +238,14 @@ app.post('/Loginn',(req,res)=>{
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
+
+
+
+
+
+
+
+
+
