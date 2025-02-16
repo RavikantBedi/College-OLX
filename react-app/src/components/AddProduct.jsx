@@ -22,7 +22,10 @@ function AddProduct() {
         }
     }, [])
     const handleApi = () => {
+        navigator.geolocation.getCurrentPosition((position) => {
             const formData = new FormData();
+            formData.append('plat', position.coords.latitude)
+            formData.append('plong', position.coords.longitude)
             formData.append('pname', pname)
             formData.append('pdesc', pdesc)
             formData.append('price', price)
@@ -42,7 +45,9 @@ function AddProduct() {
                 .catch((err) => {
                     alert('server err')
                 })
+            })
     }
+    
 
     return (
         <div>

@@ -9,7 +9,7 @@ import './Home.css';
 function CategoryPage() {
   const navigate=useNavigate();
   const param=useParams();
-  console.log(param);
+  // console.log(param);
   const [products,setproducts]=useState([]);
   const [cproducts,setcproducts]=useState([]);
   const [search,setsearch]=useState('');
@@ -25,7 +25,7 @@ function CategoryPage() {
     const url='http://localhost:3000/get-products?catName='+param.catName;
     axios.get(url)
     .then((res) => {
-        console.log(res) 
+        // console.log(res) 
         if(res.data.products){
           setproducts(res.data.products);
         }
